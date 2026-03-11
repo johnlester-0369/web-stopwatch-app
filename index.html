@@ -63,67 +63,95 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      /* clamp prevents card from touching viewport edges on any screen width */
+      padding: clamp(12px, 4vw, 32px);
     }
 
     /* ==================== CARD ==================== */
     .card {
       background-color: rgb(var(--color-surface));
-      border-radius: 16px;
-      /* Elevation 1 — subtle shadow per Material spec */
+      border-radius: 20px;
+      /* Elevation 2 — slightly lifted so card reads above the page background */
       box-shadow:
-        0 1px 2px rgba(var(--color-shadow) / 0.12),
-        0 2px 6px rgba(var(--color-shadow) / 0.08);
+        0 1px 3px  rgba(var(--color-shadow) / 0.10),
+        0 4px 12px rgba(var(--color-shadow) / 0.08);
       width: 100%;
-      max-width: 360px;
-      padding: 32px 28px 28px;
+      max-width: 420px;
+      /* clamp gives generous padding on desktop, tighter on mobile */
+      padding: clamp(20px, 6vw, 36px);
     }
 
     /* ==================== HEADER ==================== */
+    .card-header {
+      margin-bottom: 24px;
+    }
+
     .card-title {
       font-size: 12px;
       font-weight: 500;
-      letter-spacing: 1.2px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
       color: rgb(var(--color-on-surface-variant));
-      margin-bottom: 24px;
     }
 
     /* ==================== TIMER DISPLAY ==================== */
     .display-wrapper {
-      background-color: rgb(var(--color-surface-container));
-      border-radius: 12px;
-      padding: 24px 16px;
+      /* Gradient from primary to secondary container ties the brand palette together */
+      background: linear-gradient(
+        135deg,
+        rgb(var(--color-primary-container)),
+        rgb(var(--color-secondary-container))
+      );
+      border-radius: 16px;
+      padding: clamp(24px, 6vw, 36px) 20px clamp(20px, 5vw, 28px);
       text-align: center;
       margin-bottom: 24px;
     }
 
     .time {
-      /* Tabular nums prevents layout shift as digits change */
+      /* tabular-nums prevents horizontal jitter as digits cycle */
       font-variant-numeric: tabular-nums;
-      font-size: 52px;
+      /* clamp keeps digits legible from 320px phones up to desktop */
+      font-size: clamp(42px, 11vw, 62px);
       font-weight: 300;
-      letter-spacing: -1px;
-      color: rgb(var(--color-on-surface));
+      letter-spacing: -2px;
+      color: rgb(var(--color-on-primary-container));
       line-height: 1;
     }
 
     .time .ms {
-      font-size: 32px;
-      color: rgb(var(--color-on-surface-variant));
+      font-size: clamp(26px, 7vw, 38px);
+      /* Slightly dimmed to establish seconds as dominant visual */
+      color: rgb(var(--color-on-primary-container));
+      opacity: 0.6;
     }
 
-    /* ==================== BUTTONS ==================== */
+    /* Ambient status label — gives the user peripheral feedback without a modal */
+    .status-badge {
+      margin-top: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: rgb(var(--color-on-primary-container));
+      opacity: 0.55;
+      min-height: 14px;
+      transition: opacity 200ms ease;
+    }
+
+    /* ==================== CONTROLS ==================== */
     .controls {
+      /* Start gets 1.6× column width to signal it as the primary action */
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1.6fr 1fr;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .btn {
-      height: 44px;
-      border-radius: 22px;
+      /* 48px meets WCAG 2.5.8 recommended minimum touch target */
+      height: 48px;
+      border-radius: 24px;
       border: none;
       cursor: pointer;
       font-family: 'Roboto', sans-serif;
@@ -131,16 +159,18 @@
       font-weight: 500;
       letter-spacing: 0.25px;
       transition: filter 120ms ease, transform 80ms ease;
-      /* Prevent text selection on rapid clicks */
+      /* Prevents accidental text selection on double-tap / rapid clicking */
       user-select: none;
     }
 
-    .btn:active { transform: scale(0.96); }
+    .btn:active { transform: scale(0.95); }
 
-    /* Start / Stop — filled primary */
+    /* Start / Pause / Resume — filled primary */
     .btn-primary {
       background-color: rgb(var(--color-primary));
       color: rgb(var(--color-on-primary));
+      /* Slightly larger label for the dominant action */
+      font-size: 15px;
     }
     .btn-primary:hover { filter: brightness(0.92); }
 
@@ -149,14 +179,14 @@
       background-color: rgb(var(--color-secondary-container));
       color: rgb(var(--color-on-secondary-container));
     }
-    .btn-secondary:hover { filter: brightness(0.94); }
+    .btn-secondary:hover:not(:disabled) { filter: brightness(0.94); }
     .btn-secondary:disabled {
       opacity: 0.38;
       cursor: default;
     }
     .btn-secondary:disabled:active { transform: none; }
 
-    /* Reset — outlined */
+    /* Reset — outlined; lower visual weight than primary and secondary */
     .btn-outline {
       background-color: transparent;
       color: rgb(var(--color-on-surface-variant));
