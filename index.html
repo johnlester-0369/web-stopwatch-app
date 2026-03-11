@@ -6,50 +6,50 @@
   <title>Stopwatch</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
 
   <style>
     /* ==================== DESIGN TOKENS ==================== */
     :root {
-      --light-color-primary: 68 114 210;
-      --light-color-on-primary: 255 255 255;
-      --light-color-primary-container: 221 232 254;
-      --light-color-on-primary-container: 26 48 95;
-      --light-color-secondary: 126 93 209;
-      --light-color-on-secondary: 255 255 255;
-      --light-color-secondary-container: 232 228 254;
-      --light-color-on-secondary-container: 54 38 94;
-      --light-color-surface: 255 255 255;
-      --light-color-on-surface: 0 0 0;
-      --light-color-surface-container-low: 248 250 252;
-      --light-color-surface-container: 241 245 249;
-      --light-color-surface-container-high: 227 233 241;
-      --light-color-outline: 98 116 142;
-      --light-color-outline-variant: 144 161 185;
-      --light-color-on-surface-variant: 50 65 87;
-      --light-color-error: 231 0 11;
-      --light-color-on-error: 254 242 242;
-      --light-color-shadow: 0 0 0;
+      --light-color-primary:                  68 114 210;
+      --light-color-on-primary:               255 255 255;
+      --light-color-primary-container:        221 232 254;
+      --light-color-on-primary-container:     26  48  95;
+      --light-color-secondary:                126 93  209;
+      --light-color-on-secondary:             255 255 255;
+      --light-color-secondary-container:      232 228 254;
+      --light-color-on-secondary-container:   54  38  94;
+      --light-color-surface:                  255 255 255;
+      --light-color-on-surface:               0   0   0;
+      --light-color-surface-container-low:    248 250 252;
+      --light-color-surface-container:        241 245 249;
+      --light-color-surface-container-high:   227 233 241;
+      --light-color-outline:                  98  116 142;
+      --light-color-outline-variant:          144 161 185;
+      --light-color-on-surface-variant:       50  65  87;
+      --light-color-error:                    231 0   11;
+      --light-color-on-error:                 254 242 242;
+      --light-color-shadow:                   0   0   0;
 
-      --color-primary: var(--light-color-primary);
-      --color-on-primary: var(--light-color-on-primary);
-      --color-primary-container: var(--light-color-primary-container);
-      --color-on-primary-container: var(--light-color-on-primary-container);
-      --color-secondary: var(--light-color-secondary);
-      --color-on-secondary: var(--light-color-on-secondary);
-      --color-secondary-container: var(--light-color-secondary-container);
-      --color-on-secondary-container: var(--light-color-on-secondary-container);
-      --color-surface: var(--light-color-surface);
-      --color-on-surface: var(--light-color-on-surface);
-      --color-surface-container-low: var(--light-color-surface-container-low);
-      --color-surface-container: var(--light-color-surface-container);
-      --color-surface-container-high: var(--light-color-surface-container-high);
-      --color-outline: var(--light-color-outline);
-      --color-outline-variant: var(--light-color-outline-variant);
-      --color-on-surface-variant: var(--light-color-on-surface-variant);
-      --color-error: var(--light-color-error);
-      --color-on-error: var(--light-color-on-error);
-      --color-shadow: var(--light-color-shadow);
+      --color-primary:                  var(--light-color-primary);
+      --color-on-primary:               var(--light-color-on-primary);
+      --color-primary-container:        var(--light-color-primary-container);
+      --color-on-primary-container:     var(--light-color-on-primary-container);
+      --color-secondary:                var(--light-color-secondary);
+      --color-on-secondary:             var(--light-color-on-secondary);
+      --color-secondary-container:      var(--light-color-secondary-container);
+      --color-on-secondary-container:   var(--light-color-on-secondary-container);
+      --color-surface:                  var(--light-color-surface);
+      --color-on-surface:               var(--light-color-on-surface);
+      --color-surface-container-low:    var(--light-color-surface-container-low);
+      --color-surface-container:        var(--light-color-surface-container);
+      --color-surface-container-high:   var(--light-color-surface-container-high);
+      --color-outline:                  var(--light-color-outline);
+      --color-outline-variant:          var(--light-color-outline-variant);
+      --color-on-surface-variant:       var(--light-color-on-surface-variant);
+      --color-error:                    var(--light-color-error);
+      --color-on-error:                 var(--light-color-on-error);
+      --color-shadow:                   var(--light-color-shadow);
     }
 
     /* ==================== RESET & BASE ==================== */
