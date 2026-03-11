@@ -6,50 +6,50 @@
   <title>Stopwatch</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
 
   <style>
     /* ==================== DESIGN TOKENS ==================== */
     :root {
-      --light-color-primary: 68 114 210;
-      --light-color-on-primary: 255 255 255;
-      --light-color-primary-container: 221 232 254;
-      --light-color-on-primary-container: 26 48 95;
-      --light-color-secondary: 126 93 209;
-      --light-color-on-secondary: 255 255 255;
-      --light-color-secondary-container: 232 228 254;
-      --light-color-on-secondary-container: 54 38 94;
-      --light-color-surface: 255 255 255;
-      --light-color-on-surface: 0 0 0;
-      --light-color-surface-container-low: 248 250 252;
-      --light-color-surface-container: 241 245 249;
-      --light-color-surface-container-high: 227 233 241;
-      --light-color-outline: 98 116 142;
-      --light-color-outline-variant: 144 161 185;
-      --light-color-on-surface-variant: 50 65 87;
-      --light-color-error: 231 0 11;
-      --light-color-on-error: 254 242 242;
-      --light-color-shadow: 0 0 0;
+      --light-color-primary:                  68 114 210;
+      --light-color-on-primary:               255 255 255;
+      --light-color-primary-container:        221 232 254;
+      --light-color-on-primary-container:     26  48  95;
+      --light-color-secondary:                126 93  209;
+      --light-color-on-secondary:             255 255 255;
+      --light-color-secondary-container:      232 228 254;
+      --light-color-on-secondary-container:   54  38  94;
+      --light-color-surface:                  255 255 255;
+      --light-color-on-surface:               0   0   0;
+      --light-color-surface-container-low:    248 250 252;
+      --light-color-surface-container:        241 245 249;
+      --light-color-surface-container-high:   227 233 241;
+      --light-color-outline:                  98  116 142;
+      --light-color-outline-variant:          144 161 185;
+      --light-color-on-surface-variant:       50  65  87;
+      --light-color-error:                    231 0   11;
+      --light-color-on-error:                 254 242 242;
+      --light-color-shadow:                   0   0   0;
 
-      --color-primary: var(--light-color-primary);
-      --color-on-primary: var(--light-color-on-primary);
-      --color-primary-container: var(--light-color-primary-container);
-      --color-on-primary-container: var(--light-color-on-primary-container);
-      --color-secondary: var(--light-color-secondary);
-      --color-on-secondary: var(--light-color-on-secondary);
-      --color-secondary-container: var(--light-color-secondary-container);
-      --color-on-secondary-container: var(--light-color-on-secondary-container);
-      --color-surface: var(--light-color-surface);
-      --color-on-surface: var(--light-color-on-surface);
-      --color-surface-container-low: var(--light-color-surface-container-low);
-      --color-surface-container: var(--light-color-surface-container);
-      --color-surface-container-high: var(--light-color-surface-container-high);
-      --color-outline: var(--light-color-outline);
-      --color-outline-variant: var(--light-color-outline-variant);
-      --color-on-surface-variant: var(--light-color-on-surface-variant);
-      --color-error: var(--light-color-error);
-      --color-on-error: var(--light-color-on-error);
-      --color-shadow: var(--light-color-shadow);
+      --color-primary:                  var(--light-color-primary);
+      --color-on-primary:               var(--light-color-on-primary);
+      --color-primary-container:        var(--light-color-primary-container);
+      --color-on-primary-container:     var(--light-color-on-primary-container);
+      --color-secondary:                var(--light-color-secondary);
+      --color-on-secondary:             var(--light-color-on-secondary);
+      --color-secondary-container:      var(--light-color-secondary-container);
+      --color-on-secondary-container:   var(--light-color-on-secondary-container);
+      --color-surface:                  var(--light-color-surface);
+      --color-on-surface:               var(--light-color-on-surface);
+      --color-surface-container-low:    var(--light-color-surface-container-low);
+      --color-surface-container:        var(--light-color-surface-container);
+      --color-surface-container-high:   var(--light-color-surface-container-high);
+      --color-outline:                  var(--light-color-outline);
+      --color-outline-variant:          var(--light-color-outline-variant);
+      --color-on-surface-variant:       var(--light-color-on-surface-variant);
+      --color-error:                    var(--light-color-error);
+      --color-on-error:                 var(--light-color-on-error);
+      --color-shadow:                   var(--light-color-shadow);
     }
 
     /* ==================== RESET & BASE ==================== */
@@ -63,67 +63,95 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      /* clamp prevents card from touching viewport edges on any screen width */
+      padding: clamp(12px, 4vw, 32px);
     }
 
     /* ==================== CARD ==================== */
     .card {
       background-color: rgb(var(--color-surface));
-      border-radius: 16px;
-      /* Elevation 1 — subtle shadow per Material spec */
+      border-radius: 20px;
+      /* Elevation 2 — slightly lifted so card reads above the page background */
       box-shadow:
-        0 1px 2px rgba(var(--color-shadow) / 0.12),
-        0 2px 6px rgba(var(--color-shadow) / 0.08);
+        0 1px 3px  rgba(var(--color-shadow) / 0.10),
+        0 4px 12px rgba(var(--color-shadow) / 0.08);
       width: 100%;
-      max-width: 360px;
-      padding: 32px 28px 28px;
+      max-width: 420px;
+      /* clamp gives generous padding on desktop, tighter on mobile */
+      padding: clamp(20px, 6vw, 36px);
     }
 
     /* ==================== HEADER ==================== */
+    .card-header {
+      margin-bottom: 24px;
+    }
+
     .card-title {
       font-size: 12px;
       font-weight: 500;
-      letter-spacing: 1.2px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
       color: rgb(var(--color-on-surface-variant));
-      margin-bottom: 24px;
     }
 
     /* ==================== TIMER DISPLAY ==================== */
     .display-wrapper {
-      background-color: rgb(var(--color-surface-container));
-      border-radius: 12px;
-      padding: 24px 16px;
+      /* Gradient from primary to secondary container ties the brand palette together */
+      background: linear-gradient(
+        135deg,
+        rgb(var(--color-primary-container)),
+        rgb(var(--color-secondary-container))
+      );
+      border-radius: 16px;
+      padding: clamp(24px, 6vw, 36px) 20px clamp(20px, 5vw, 28px);
       text-align: center;
       margin-bottom: 24px;
     }
 
     .time {
-      /* Tabular nums prevents layout shift as digits change */
+      /* tabular-nums prevents horizontal jitter as digits cycle */
       font-variant-numeric: tabular-nums;
-      font-size: 52px;
+      /* clamp keeps digits legible from 320px phones up to desktop */
+      font-size: clamp(42px, 11vw, 62px);
       font-weight: 300;
-      letter-spacing: -1px;
-      color: rgb(var(--color-on-surface));
+      letter-spacing: -2px;
+      color: rgb(var(--color-on-primary-container));
       line-height: 1;
     }
 
     .time .ms {
-      font-size: 32px;
-      color: rgb(var(--color-on-surface-variant));
+      font-size: clamp(26px, 7vw, 38px);
+      /* Slightly dimmed to establish seconds as dominant visual */
+      color: rgb(var(--color-on-primary-container));
+      opacity: 0.6;
     }
 
-    /* ==================== BUTTONS ==================== */
+    /* Ambient status label — gives the user peripheral feedback without a modal */
+    .status-badge {
+      margin-top: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: rgb(var(--color-on-primary-container));
+      opacity: 0.55;
+      min-height: 14px;
+      transition: opacity 200ms ease;
+    }
+
+    /* ==================== CONTROLS ==================== */
     .controls {
+      /* Start gets 1.6× column width to signal it as the primary action */
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1.6fr 1fr;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .btn {
-      height: 44px;
-      border-radius: 22px;
+      /* 48px meets WCAG 2.5.8 recommended minimum touch target */
+      height: 48px;
+      border-radius: 24px;
       border: none;
       cursor: pointer;
       font-family: 'Roboto', sans-serif;
@@ -131,16 +159,18 @@
       font-weight: 500;
       letter-spacing: 0.25px;
       transition: filter 120ms ease, transform 80ms ease;
-      /* Prevent text selection on rapid clicks */
+      /* Prevents accidental text selection on double-tap / rapid clicking */
       user-select: none;
     }
 
-    .btn:active { transform: scale(0.96); }
+    .btn:active { transform: scale(0.95); }
 
-    /* Start / Stop — filled primary */
+    /* Start / Pause / Resume — filled primary */
     .btn-primary {
       background-color: rgb(var(--color-primary));
       color: rgb(var(--color-on-primary));
+      /* Slightly larger label for the dominant action */
+      font-size: 15px;
     }
     .btn-primary:hover { filter: brightness(0.92); }
 
@@ -149,14 +179,14 @@
       background-color: rgb(var(--color-secondary-container));
       color: rgb(var(--color-on-secondary-container));
     }
-    .btn-secondary:hover { filter: brightness(0.94); }
+    .btn-secondary:hover:not(:disabled) { filter: brightness(0.94); }
     .btn-secondary:disabled {
       opacity: 0.38;
       cursor: default;
     }
     .btn-secondary:disabled:active { transform: none; }
 
-    /* Reset — outlined */
+    /* Reset — outlined; lower visual weight than primary and secondary */
     .btn-outline {
       background-color: transparent;
       color: rgb(var(--color-on-surface-variant));
@@ -164,51 +194,99 @@
     }
     .btn-outline:hover { background-color: rgba(var(--color-on-surface) / 0.06); }
 
-    /* ==================== LAP LIST ==================== */
+    /* ==================== LAP SECTION ==================== */
     .laps-header {
-      display: flex;
+      display: none;
       justify-content: space-between;
+      align-items: center;
       font-size: 11px;
       font-weight: 500;
-      letter-spacing: 0.8px;
+      letter-spacing: 1px;
       text-transform: uppercase;
       color: rgb(var(--color-on-surface-variant));
-      padding: 0 4px 8px;
-      /* Hidden until laps exist — avoids empty visual noise */
-      display: none;
+      /* Bottom border separates header from scrollable list */
+      padding: 0 12px 8px;
+      border-bottom: 1px solid rgb(var(--color-surface-container-high));
+      margin-bottom: 4px;
     }
 
     .laps-header.visible { display: flex; }
 
+    /* Live count chip gives users a quick reference without counting rows */
+    .laps-count {
+      background-color: rgb(var(--color-surface-container));
+      border-radius: 10px;
+      padding: 2px 9px;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgb(var(--color-on-surface-variant));
+    }
+
     .laps {
-      max-height: 192px;
+      max-height: 220px;
       overflow-y: auto;
-      /* Scrollbar styling — subtle to stay clean */
       scrollbar-width: thin;
       scrollbar-color: rgb(var(--color-outline-variant)) transparent;
+    }
+
+    /* Webkit scrollbar — matches thin scrollbar-width for Chromium/Safari parity */
+    .laps::-webkit-scrollbar          { width: 4px; }
+    .laps::-webkit-scrollbar-track    { background: transparent; }
+    .laps::-webkit-scrollbar-thumb    {
+      background-color: rgb(var(--color-outline-variant));
+      border-radius: 4px;
     }
 
     .lap-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 4px;
-      border-bottom: 1px solid rgb(var(--color-surface-container-high));
+      padding: 10px 12px;
+      border-radius: 10px;
       font-size: 14px;
+      margin-bottom: 2px;
       animation: fadeSlideIn 180ms ease forwards;
+      transition: background-color 100ms ease;
     }
 
-    .lap-item:last-child { border-bottom: none; }
+    .lap-item:hover {
+      background-color: rgb(var(--color-surface-container));
+    }
+
+    .lap-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
     .lap-num {
       color: rgb(var(--color-on-surface-variant));
       font-size: 13px;
-      min-width: 56px;
     }
 
-    /* Fastest lap tinted green, slowest tinted amber — visual scan aid */
-    .lap-item.fastest .lap-time { color: rgb(0 130 54); }
-    .lap-item.slowest .lap-time  { color: rgb(225 113 0); }
+    /* Pill badge supplements color with text — aids color-blind users */
+    .lap-badge {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 8px;
+    }
+
+    .lap-item.fastest .lap-badge {
+      background-color: rgba(0 130 54 / 0.12);
+      color: rgb(0 110 45);
+    }
+
+    .lap-item.slowest .lap-badge {
+      background-color: rgba(225 113 0 / 0.12);
+      color: rgb(190 95 0);
+    }
+
+    /* Coloured time value reinforces the badge meaning */
+    .lap-item.fastest .lap-time { color: rgb(0 110 45); }
+    .lap-item.slowest .lap-time { color: rgb(190 95 0); }
 
     .lap-time {
       font-variant-numeric: tabular-nums;
@@ -216,38 +294,58 @@
     }
 
     @keyframes fadeSlideIn {
-      from { opacity: 0; transform: translateY(-6px); }
+      from { opacity: 0; transform: translateY(-4px); }
       to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==================== RESPONSIVE BREAKPOINTS ==================== */
+
+    /* Very narrow phones (≤400px): loosen vertical breathing room */
+    @media (max-width: 400px) {
+      body { align-items: flex-start; padding-top: 20px; }
+      .card { border-radius: 16px; }
+      .controls { gap: 8px; }
+    }
+
+    /* Tablet and desktop: center card with extra breathing room */
+    @media (min-width: 600px) {
+      body { align-items: center; }
     }
   </style>
 </head>
 <body>
 
 <div class="card">
-  <p class="card-title">Stopwatch</p>
+  <div class="card-header">
+    <p class="card-title">Stopwatch</p>
+  </div>
 
   <div class="display-wrapper">
     <div class="time" id="display">
       00:00<span class="ms">.00</span>
     </div>
+    <!-- Ambient state label: no modal needed, user always knows current state -->
+    <div class="status-badge" id="status">Ready</div>
   </div>
 
   <div class="controls">
-    <button class="btn btn-outline"  id="btn-reset" onclick="reset()">Reset</button>
-    <button class="btn btn-primary"  id="btn-start" onclick="toggleStartStop()">Start</button>
-    <button class="btn btn-secondary" id="btn-lap"  onclick="recordLap()" disabled>Lap</button>
+    <button class="btn btn-outline"    id="btn-reset" onclick="reset()">Reset</button>
+    <button class="btn btn-primary"    id="btn-start" onclick="toggleStartStop()">Start</button>
+    <button class="btn btn-secondary"  id="btn-lap"   onclick="recordLap()" disabled>Lap</button>
   </div>
 
-  <div class="laps-header" id="laps-header">
-    <span>Lap</span>
-    <span>Time</span>
+  <div class="lap-section">
+    <div class="laps-header" id="laps-header">
+      <span>Laps</span>
+      <span class="laps-count" id="laps-count">0</span>
+    </div>
+    <div class="laps" id="laps"></div>
   </div>
-  <div class="laps" id="laps"></div>
 </div>
 
 <script>
-  let elapsed   = 0;       // ms accumulated before current run
-  let startedAt = null;    // Date.now() snapshot when timer last started
+  let elapsed   = 0;       // ms accumulated before the current run segment
+  let startedAt = null;    // Date.now() snapshot when the timer last started
   let running   = false;
   let interval  = null;
   let lapTimes  = [];      // each entry is the lap duration in ms
@@ -257,8 +355,10 @@
   const btnLap     = document.getElementById('btn-lap');
   const lapsEl     = document.getElementById('laps');
   const lapsHeader = document.getElementById('laps-header');
+  const lapsCount  = document.getElementById('laps-count');
+  const statusEl   = document.getElementById('status');
 
-  // Format ms → "MM:SS.cc" (centiseconds for readability at a glance)
+  // Format ms → "MM:SS.cc" — centiseconds for human readability at a glance
   function formatTime(ms) {
     const centis  = Math.floor(ms / 10) % 100;
     const seconds = Math.floor(ms / 1000) % 60;
@@ -268,7 +368,7 @@
   }
 
   function tick() {
-    // Compute total elapsed using wall clock to avoid drift from interval skew
+    // Wall-clock diff avoids drift when tab is backgrounded or interval fires late
     const total = elapsed + (Date.now() - startedAt);
     display.innerHTML = formatTime(total);
   }
@@ -281,13 +381,15 @@
       running = true;
       btnStart.textContent = 'Pause';
       btnLap.disabled = false;
+      statusEl.textContent = 'Running';
     } else {
-      // Accumulate elapsed before pausing so resume picks up where we left off
+      // Accumulate elapsed before pausing so resume picks up exactly where we left off
       elapsed += Date.now() - startedAt;
       clearInterval(interval);
       running = false;
       btnStart.textContent = 'Resume';
       btnLap.disabled = true;
+      statusEl.textContent = 'Paused';
     }
   }
 
@@ -302,11 +404,12 @@
     btnLap.disabled = true;
     lapsEl.innerHTML = '';
     lapsHeader.classList.remove('visible');
+    statusEl.textContent = 'Ready';
   }
 
   function recordLap() {
-    const total      = elapsed + (Date.now() - startedAt);
-    const prevTotal  = lapTimes.reduce((a, b) => a + b, 0);
+    const total       = elapsed + (Date.now() - startedAt);
+    const prevTotal   = lapTimes.reduce((a, b) => a + b, 0);
     const lapDuration = total - prevTotal;
     lapTimes.push(lapDuration);
     renderLaps();
@@ -314,28 +417,39 @@
 
   function renderLaps() {
     lapsHeader.classList.add('visible');
+    lapsCount.textContent = lapTimes.length;
     lapsEl.innerHTML = '';
 
-    // Identify fastest/slowest only when 2+ laps exist — single lap has no reference
+    // Fastest/slowest only meaningful with 2+ laps — single lap has no comparative reference
     const fastest = lapTimes.length > 1 ? Math.min(...lapTimes) : null;
     const slowest = lapTimes.length > 1 ? Math.max(...lapTimes) : null;
 
-    // Render newest lap first — most relevant lap is immediately visible
+    // Newest lap first — most recent split is immediately visible without scrolling
     [...lapTimes].reverse().forEach((dur, reverseIdx) => {
-      const num  = lapTimes.length - reverseIdx;
+      const num      = lapTimes.length - reverseIdx;
+      const isFastest = fastest !== null && dur === fastest;
+      const isSlowest = slowest !== null && dur === slowest;
+
       const item = document.createElement('div');
       item.className = 'lap-item';
+      if (isFastest) item.classList.add('fastest');
+      if (isSlowest) item.classList.add('slowest');
 
-      if (fastest !== null && dur === fastest) item.classList.add('fastest');
-      if (slowest !== null && dur === slowest) item.classList.add('slowest');
+      // Text badge supplements colour — aids colour-blind users scanning the list
+      const badgeHtml = isFastest
+        ? '<span class="lap-badge">Best</span>'
+        : isSlowest
+        ? '<span class="lap-badge">Slow</span>'
+        : '';
 
       item.innerHTML = `
-        <span class="lap-num">Lap ${num}</span>
-        <span class="lap-time">${formatTime(dur).replace(/<[^>]+>/g, m =>
-          m.includes('class') ? m : m  // preserve inner span for ms styling
-        )}</span>`;
+        <div class="lap-left">
+          <span class="lap-num">Lap ${num}</span>
+          ${badgeHtml}
+        </div>
+        <span class="lap-time"></span>`;
 
-      // Re-apply ms span since innerHTML strips it via formatTime
+      // Set innerHTML on the time cell after construction to preserve inner <span>
       item.querySelector('.lap-time').innerHTML = formatTime(dur);
       lapsEl.appendChild(item);
     });
