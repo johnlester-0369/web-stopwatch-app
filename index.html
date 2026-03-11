@@ -194,51 +194,99 @@
     }
     .btn-outline:hover { background-color: rgba(var(--color-on-surface) / 0.06); }
 
-    /* ==================== LAP LIST ==================== */
+    /* ==================== LAP SECTION ==================== */
     .laps-header {
-      display: flex;
+      display: none;
       justify-content: space-between;
+      align-items: center;
       font-size: 11px;
       font-weight: 500;
-      letter-spacing: 0.8px;
+      letter-spacing: 1px;
       text-transform: uppercase;
       color: rgb(var(--color-on-surface-variant));
-      padding: 0 4px 8px;
-      /* Hidden until laps exist — avoids empty visual noise */
-      display: none;
+      /* Bottom border separates header from scrollable list */
+      padding: 0 12px 8px;
+      border-bottom: 1px solid rgb(var(--color-surface-container-high));
+      margin-bottom: 4px;
     }
 
     .laps-header.visible { display: flex; }
 
+    /* Live count chip gives users a quick reference without counting rows */
+    .laps-count {
+      background-color: rgb(var(--color-surface-container));
+      border-radius: 10px;
+      padding: 2px 9px;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgb(var(--color-on-surface-variant));
+    }
+
     .laps {
-      max-height: 192px;
+      max-height: 220px;
       overflow-y: auto;
-      /* Scrollbar styling — subtle to stay clean */
       scrollbar-width: thin;
       scrollbar-color: rgb(var(--color-outline-variant)) transparent;
+    }
+
+    /* Webkit scrollbar — matches thin scrollbar-width for Chromium/Safari parity */
+    .laps::-webkit-scrollbar          { width: 4px; }
+    .laps::-webkit-scrollbar-track    { background: transparent; }
+    .laps::-webkit-scrollbar-thumb    {
+      background-color: rgb(var(--color-outline-variant));
+      border-radius: 4px;
     }
 
     .lap-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 4px;
-      border-bottom: 1px solid rgb(var(--color-surface-container-high));
+      padding: 10px 12px;
+      border-radius: 10px;
       font-size: 14px;
+      margin-bottom: 2px;
       animation: fadeSlideIn 180ms ease forwards;
+      transition: background-color 100ms ease;
     }
 
-    .lap-item:last-child { border-bottom: none; }
+    .lap-item:hover {
+      background-color: rgb(var(--color-surface-container));
+    }
+
+    .lap-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
     .lap-num {
       color: rgb(var(--color-on-surface-variant));
       font-size: 13px;
-      min-width: 56px;
     }
 
-    /* Fastest lap tinted green, slowest tinted amber — visual scan aid */
-    .lap-item.fastest .lap-time { color: rgb(0 130 54); }
-    .lap-item.slowest .lap-time  { color: rgb(225 113 0); }
+    /* Pill badge supplements color with text — aids color-blind users */
+    .lap-badge {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 8px;
+    }
+
+    .lap-item.fastest .lap-badge {
+      background-color: rgba(0 130 54 / 0.12);
+      color: rgb(0 110 45);
+    }
+
+    .lap-item.slowest .lap-badge {
+      background-color: rgba(225 113 0 / 0.12);
+      color: rgb(190 95 0);
+    }
+
+    /* Coloured time value reinforces the badge meaning */
+    .lap-item.fastest .lap-time { color: rgb(0 110 45); }
+    .lap-item.slowest .lap-time { color: rgb(190 95 0); }
 
     .lap-time {
       font-variant-numeric: tabular-nums;
@@ -246,38 +294,58 @@
     }
 
     @keyframes fadeSlideIn {
-      from { opacity: 0; transform: translateY(-6px); }
+      from { opacity: 0; transform: translateY(-4px); }
       to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==================== RESPONSIVE BREAKPOINTS ==================== */
+
+    /* Very narrow phones (≤400px): loosen vertical breathing room */
+    @media (max-width: 400px) {
+      body { align-items: flex-start; padding-top: 20px; }
+      .card { border-radius: 16px; }
+      .controls { gap: 8px; }
+    }
+
+    /* Tablet and desktop: center card with extra breathing room */
+    @media (min-width: 600px) {
+      body { align-items: center; }
     }
   </style>
 </head>
 <body>
 
 <div class="card">
-  <p class="card-title">Stopwatch</p>
+  <div class="card-header">
+    <p class="card-title">Stopwatch</p>
+  </div>
 
   <div class="display-wrapper">
     <div class="time" id="display">
       00:00<span class="ms">.00</span>
     </div>
+    <!-- Ambient state label: no modal needed, user always knows current state -->
+    <div class="status-badge" id="status">Ready</div>
   </div>
 
   <div class="controls">
-    <button class="btn btn-outline"  id="btn-reset" onclick="reset()">Reset</button>
-    <button class="btn btn-primary"  id="btn-start" onclick="toggleStartStop()">Start</button>
-    <button class="btn btn-secondary" id="btn-lap"  onclick="recordLap()" disabled>Lap</button>
+    <button class="btn btn-outline"    id="btn-reset" onclick="reset()">Reset</button>
+    <button class="btn btn-primary"    id="btn-start" onclick="toggleStartStop()">Start</button>
+    <button class="btn btn-secondary"  id="btn-lap"   onclick="recordLap()" disabled>Lap</button>
   </div>
 
-  <div class="laps-header" id="laps-header">
-    <span>Lap</span>
-    <span>Time</span>
+  <div class="lap-section">
+    <div class="laps-header" id="laps-header">
+      <span>Laps</span>
+      <span class="laps-count" id="laps-count">0</span>
+    </div>
+    <div class="laps" id="laps"></div>
   </div>
-  <div class="laps" id="laps"></div>
 </div>
 
 <script>
-  let elapsed   = 0;       // ms accumulated before current run
-  let startedAt = null;    // Date.now() snapshot when timer last started
+  let elapsed   = 0;       // ms accumulated before the current run segment
+  let startedAt = null;    // Date.now() snapshot when the timer last started
   let running   = false;
   let interval  = null;
   let lapTimes  = [];      // each entry is the lap duration in ms
