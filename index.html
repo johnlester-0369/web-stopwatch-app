@@ -26,9 +26,10 @@
   </div>
 
   <div class="controls">
-    <button class="btn btn-outline"    id="btn-reset" onclick="reset()">Reset</button>
-    <button class="btn btn-primary"    id="btn-start" onclick="toggleStartStop()">Start</button>
-    <button class="btn btn-secondary"  id="btn-lap"   onclick="recordLap()" disabled>Lap</button>
+    <!-- onclick handlers removed — app.js attaches listeners via addEventListener -->
+    <button class="btn btn-outline"   id="btn-reset">Reset</button>
+    <button class="btn btn-primary"   id="btn-start">Start</button>
+    <button class="btn btn-secondary" id="btn-lap" disabled>Lap</button>
   </div>
 
   <div class="lap-section">
@@ -40,118 +41,7 @@
   </div>
 </div>
 
-<script>
-  let elapsed   = 0;       // ms accumulated before the current run segment
-  let startedAt = null;    // Date.now() snapshot when the timer last started
-  let running   = false;
-  let interval  = null;
-  let lapTimes  = [];      // each entry is the lap duration in ms
-
-  const display    = document.getElementById('display');
-  const btnStart   = document.getElementById('btn-start');
-  const btnLap     = document.getElementById('btn-lap');
-  const lapsEl     = document.getElementById('laps');
-  const lapsHeader = document.getElementById('laps-header');
-  const lapsCount  = document.getElementById('laps-count');
-  const statusEl   = document.getElementById('status');
-
-  // Format ms → "MM:SS.cc" — centiseconds for human readability at a glance
-  function formatTime(ms) {
-    const centis  = Math.floor(ms / 10) % 100;
-    const seconds = Math.floor(ms / 1000) % 60;
-    const minutes = Math.floor(ms / 60000);
-    const pad = n => String(n).padStart(2, '0');
-    return `${pad(minutes)}:${pad(seconds)}<span class="ms">.${pad(centis)}</span>`;
-  }
-
-  function tick() {
-    // Wall-clock diff avoids drift when tab is backgrounded or interval fires late
-    const total = elapsed + (Date.now() - startedAt);
-    display.innerHTML = formatTime(total);
-  }
-
-  function toggleStartStop() {
-    if (!running) {
-      startedAt = Date.now();
-      // 10ms interval gives centisecond precision without heavy CPU cost
-      interval = setInterval(tick, 10);
-      running = true;
-      btnStart.textContent = 'Pause';
-      btnLap.disabled = false;
-      statusEl.textContent = 'Running';
-    } else {
-      // Accumulate elapsed before pausing so resume picks up exactly where we left off
-      elapsed += Date.now() - startedAt;
-      clearInterval(interval);
-      running = false;
-      btnStart.textContent = 'Resume';
-      btnLap.disabled = true;
-      statusEl.textContent = 'Paused';
-    }
-  }
-
-  function reset() {
-    clearInterval(interval);
-    elapsed   = 0;
-    startedAt = null;
-    running   = false;
-    lapTimes  = [];
-    display.innerHTML = '00:00<span class="ms">.00</span>';
-    btnStart.textContent = 'Start';
-    btnLap.disabled = true;
-    lapsEl.innerHTML = '';
-    lapsHeader.classList.remove('visible');
-    statusEl.textContent = 'Ready';
-  }
-
-  function recordLap() {
-    const total       = elapsed + (Date.now() - startedAt);
-    const prevTotal   = lapTimes.reduce((a, b) => a + b, 0);
-    const lapDuration = total - prevTotal;
-    lapTimes.push(lapDuration);
-    renderLaps();
-  }
-
-  function renderLaps() {
-    lapsHeader.classList.add('visible');
-    lapsCount.textContent = lapTimes.length;
-    lapsEl.innerHTML = '';
-
-    // Fastest/slowest only meaningful with 2+ laps — single lap has no comparative reference
-    const fastest = lapTimes.length > 1 ? Math.min(...lapTimes) : null;
-    const slowest = lapTimes.length > 1 ? Math.max(...lapTimes) : null;
-
-    // Newest lap first — most recent split is immediately visible without scrolling
-    [...lapTimes].reverse().forEach((dur, reverseIdx) => {
-      const num      = lapTimes.length - reverseIdx;
-      const isFastest = fastest !== null && dur === fastest;
-      const isSlowest = slowest !== null && dur === slowest;
-
-      const item = document.createElement('div');
-      item.className = 'lap-item';
-      if (isFastest) item.classList.add('fastest');
-      if (isSlowest) item.classList.add('slowest');
-
-      // Text badge supplements colour — aids colour-blind users scanning the list
-      const badgeHtml = isFastest
-        ? '<span class="lap-badge">Best</span>'
-        : isSlowest
-        ? '<span class="lap-badge">Slow</span>'
-        : '';
-
-      item.innerHTML = `
-        <div class="lap-left">
-          <span class="lap-num">Lap ${num}</span>
-          ${badgeHtml}
-        </div>
-        <span class="lap-time"></span>`;
-
-      // Set innerHTML on the time cell after construction to preserve inner <span>
-      item.querySelector('.lap-time').innerHTML = formatTime(dur);
-      lapsEl.appendChild(item);
-    });
-  }
-</script>
-
+<!-- type="module" defers execution and enables ES module import/export -->
+<script type="module" src="js/app.js"></script>
 </body>
 </html>
