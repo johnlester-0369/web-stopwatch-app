@@ -355,8 +355,10 @@
   const btnLap     = document.getElementById('btn-lap');
   const lapsEl     = document.getElementById('laps');
   const lapsHeader = document.getElementById('laps-header');
+  const lapsCount  = document.getElementById('laps-count');
+  const statusEl   = document.getElementById('status');
 
-  // Format ms → "MM:SS.cc" (centiseconds for readability at a glance)
+  // Format ms → "MM:SS.cc" — centiseconds for human readability at a glance
   function formatTime(ms) {
     const centis  = Math.floor(ms / 10) % 100;
     const seconds = Math.floor(ms / 1000) % 60;
@@ -366,7 +368,7 @@
   }
 
   function tick() {
-    // Compute total elapsed using wall clock to avoid drift from interval skew
+    // Wall-clock diff avoids drift when tab is backgrounded or interval fires late
     const total = elapsed + (Date.now() - startedAt);
     display.innerHTML = formatTime(total);
   }
@@ -379,13 +381,15 @@
       running = true;
       btnStart.textContent = 'Pause';
       btnLap.disabled = false;
+      statusEl.textContent = 'Running';
     } else {
-      // Accumulate elapsed before pausing so resume picks up where we left off
+      // Accumulate elapsed before pausing so resume picks up exactly where we left off
       elapsed += Date.now() - startedAt;
       clearInterval(interval);
       running = false;
       btnStart.textContent = 'Resume';
       btnLap.disabled = true;
+      statusEl.textContent = 'Paused';
     }
   }
 
@@ -400,11 +404,12 @@
     btnLap.disabled = true;
     lapsEl.innerHTML = '';
     lapsHeader.classList.remove('visible');
+    statusEl.textContent = 'Ready';
   }
 
   function recordLap() {
-    const total      = elapsed + (Date.now() - startedAt);
-    const prevTotal  = lapTimes.reduce((a, b) => a + b, 0);
+    const total       = elapsed + (Date.now() - startedAt);
+    const prevTotal   = lapTimes.reduce((a, b) => a + b, 0);
     const lapDuration = total - prevTotal;
     lapTimes.push(lapDuration);
     renderLaps();
@@ -412,28 +417,39 @@
 
   function renderLaps() {
     lapsHeader.classList.add('visible');
+    lapsCount.textContent = lapTimes.length;
     lapsEl.innerHTML = '';
 
-    // Identify fastest/slowest only when 2+ laps exist — single lap has no reference
+    // Fastest/slowest only meaningful with 2+ laps — single lap has no comparative reference
     const fastest = lapTimes.length > 1 ? Math.min(...lapTimes) : null;
     const slowest = lapTimes.length > 1 ? Math.max(...lapTimes) : null;
 
-    // Render newest lap first — most relevant lap is immediately visible
+    // Newest lap first — most recent split is immediately visible without scrolling
     [...lapTimes].reverse().forEach((dur, reverseIdx) => {
-      const num  = lapTimes.length - reverseIdx;
+      const num      = lapTimes.length - reverseIdx;
+      const isFastest = fastest !== null && dur === fastest;
+      const isSlowest = slowest !== null && dur === slowest;
+
       const item = document.createElement('div');
       item.className = 'lap-item';
+      if (isFastest) item.classList.add('fastest');
+      if (isSlowest) item.classList.add('slowest');
 
-      if (fastest !== null && dur === fastest) item.classList.add('fastest');
-      if (slowest !== null && dur === slowest) item.classList.add('slowest');
+      // Text badge supplements colour — aids colour-blind users scanning the list
+      const badgeHtml = isFastest
+        ? '<span class="lap-badge">Best</span>'
+        : isSlowest
+        ? '<span class="lap-badge">Slow</span>'
+        : '';
 
       item.innerHTML = `
-        <span class="lap-num">Lap ${num}</span>
-        <span class="lap-time">${formatTime(dur).replace(/<[^>]+>/g, m =>
-          m.includes('class') ? m : m  // preserve inner span for ms styling
-        )}</span>`;
+        <div class="lap-left">
+          <span class="lap-num">Lap ${num}</span>
+          ${badgeHtml}
+        </div>
+        <span class="lap-time"></span>`;
 
-      // Re-apply ms span since innerHTML strips it via formatTime
+      // Set innerHTML on the time cell after construction to preserve inner <span>
       item.querySelector('.lap-time').innerHTML = formatTime(dur);
       lapsEl.appendChild(item);
     });
